@@ -73,7 +73,7 @@ export class CensorSensor {
 
   // general phrase functions
   private prepareForParsing(phrase: string): string {
-    return phrase.toLowerCase().replace(/0rz/g, "ers").replace(/0t/g, "er").replace(/xX/g, "ck").replace(/0/g, "o").replace(/!/g, "i").replace(/3/g, "e").replace(/4/g, "a").replace(/5/g, "s").replace(/[^a-zA-Z0-9\w]/g, "");
+    return phrase.toLowerCase().replace(/0rz/g, "ers").replace(/0t/g, "er").replace(/xX/g, "ck").replace(/0/g, "o").replace(/!/g, "i").replace(/3/g, "e").replace(/4/g, "a").replace(/5/g, "s").replace(/[^a-z0-9\s]/g, "");
   }
 
   // profanity checking functions
@@ -154,14 +154,16 @@ export class CensorSensor {
 
   public cleanProfanityIsh(phrase: string): string {
     const cleanFunc = this.cleanFunction;
+    const phrases = phrase.split(' ');
+    var allProfanity;
 
-    const comparePhrase = this.prepareForParsing(phrase);
-    const allProfanity = this.profaneIshWords(comparePhrase, phrase);
-
-    allProfanity.forEach(word => {
-      const regex = new RegExp(word, 'gi');
-      phrase = phrase.replace(regex, cleanFunc(word));
-    });
+    for (var i = 0; i < phrases.length; i++) {
+      allProfanity = this.profaneIshWords(this.prepareForParsing(phrases[i]), phrases[i]);
+      allProfanity.forEach(word => {
+        const regex = new RegExp(word, 'gi');
+        phrase = phrase.replace(regex, cleanFunc(word));
+      });
+    }
 
     return phrase;
   }
