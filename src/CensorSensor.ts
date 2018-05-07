@@ -73,7 +73,7 @@ export class CensorSensor {
 
   // general phrase functions
   private prepareForParsing(phrase: string): string {
-    return phrase.toLowerCase();
+    return phrase.toLowerCase().replace(/[^a-zA-Z0-9\w]/g, "");
   }
 
   // profanity checking functions
@@ -112,22 +112,22 @@ export class CensorSensor {
     return this._isProfaneIsh(this.prepareForParsing(phrase), dict);
   }
 
-  private _profaneIshWords(phrase: string, dict: { [word: string]: CensorTier }): string[] {
+  private _profaneIshWords(phrase: string, dict: { [word: string]: CensorTier }, oPhrase: string): string[] {
     const foundProfanity = [];
 
     Object.keys(dict).forEach(dictWord => {
       const tier = dict[dictWord];
 
-      if(includes(phrase, dictWord) && this.enabledTiers[tier]) foundProfanity.push(dictWord);
+      if(includes(phrase, dictWord) && this.enabledTiers[tier]) foundProfanity.push(oPhrase);
     });
 
     return foundProfanity;
   }
 
-  public profaneIshWords(phrase: string) {
+  public profaneIshWords(phrase: string, oPhrase: string) {
     const dict = this.currentDictionary;
 
-    return this._profaneIshWords(phrase, dict);
+    return this._profaneIshWords(phrase, dict, oPhrase);
   }
 
   public setCleanFunction(func: (str: string) => string): void {
@@ -156,7 +156,7 @@ export class CensorSensor {
     const cleanFunc = this.cleanFunction;
 
     const comparePhrase = this.prepareForParsing(phrase);
-    const allProfanity = this.profaneIshWords(comparePhrase);
+    const allProfanity = this.profaneIshWords(comparePhrase, phrase);
 
     allProfanity.forEach(word => {
       const regex = new RegExp(word, 'gi');
