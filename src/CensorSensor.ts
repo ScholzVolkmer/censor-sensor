@@ -160,7 +160,7 @@ export class CensorSensor {
     for (var i = 0; i < phrases.length; i++) {
       allProfanity = this.profaneIshWords(this.prepareForParsing(phrases[i]), phrases[i]);
       allProfanity.forEach(word => {
-        const regex = new RegExp(word, 'gi');
+        const regex = new RegExp(word.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'gi');
         phrase = phrase.replace(regex, cleanFunc(word));
       });
     }
