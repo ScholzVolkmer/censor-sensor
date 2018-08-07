@@ -73,7 +73,7 @@ export class CensorSensor {
 
   // general phrase functions
   private prepareForParsing(phrase: string): string {
-    return phrase.toLowerCase().replace(/0rz/g, "ers").replace(/0t/g, "er").replace(/xX/g, "ck").replace(/0/g, "o").replace(/!/g, "i").replace(/3/g, "e").replace(/4/g, "a").replace(/5/g, "s").replace(/[^a-z0-9\u0400-\u04FF\u0370-\u03ff\u1f00-\u1fff-.(),äüö'\s]/g, "");
+    return phrase.toLowerCase().replace(/0rz/g, "ers").replace(/0t/g, "er").replace(/xX/g, "ck").replace(/0/g, "o").replace(/!/g, "i").replace(/3/g, "e").replace(/4/g, "a").replace(/5/g, "s");
   }
 
   // profanity checking functions
